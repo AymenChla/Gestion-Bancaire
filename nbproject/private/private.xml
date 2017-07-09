@@ -2,30 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/gestionbancaire3/MainFrame.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/GestionBancaire/Transaction.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/GestionBancaire/CompteCourant.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/gestionbancaire3/GestionBancaire3.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/GestionBancaire/CompteEpargne.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/MyFrames/MyPanels/NouveauAgencePanel.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/MyFrames/MyPanels/VisionnerTransactionsPanel.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/MyFrames/MyPanels/SupprimerComptePanel.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/gestionbancaire3/Authentification.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/MyFrames/MyPanels/ModificationAgencePanel.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/MyFrames/FrameCompte.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/GestionBancaire/Client.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/MyFrames/FrameClient.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/MyFrames/MyPanels/NouveauComptePanel.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/MyFrames/MyPanels/SuppressionClientPanel.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/GestionBancaire/AgenceBancaire.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/MyFrames/MyPanels/VisionnerClientPanel.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/GestionBancaire/ConnectionBD.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/MyFrames/MyPanels/NouveauClientPanel.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/MyFrames/MyPanels/TransactionComptePanel.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/MyFrames/FrameAgence.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/GestionBancaire/Compte.java</file>
-            <file>file:/C:/Users/asus%20pro/Documents/NetBeansProjects/GestionBancaire3/src/MyFrames/MyPanels/ModificationClientPanel.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

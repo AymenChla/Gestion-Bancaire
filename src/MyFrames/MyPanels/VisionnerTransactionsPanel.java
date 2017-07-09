@@ -6,6 +6,7 @@
 package MyFrames.MyPanels;
 
 import GestionBancaire.ConnectionBD;
+import java.io.PrintWriter;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -74,6 +75,7 @@ public class VisionnerTransactionsPanel extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         table_transactions = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
 
         jLabel1.setText("Rechercher par:");
 
@@ -94,16 +96,20 @@ public class VisionnerTransactionsPanel extends javax.swing.JPanel {
 
         table_transactions.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
         jScrollPane1.setViewportView(table_transactions);
+
+        jButton2.setText("Exporter");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -112,16 +118,18 @@ public class VisionnerTransactionsPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(54, 54, 54)
-                        .addComponent(type_recherche, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
-                        .addComponent(code_field, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(jButton1)))
-                .addContainerGap(62, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addGap(54, 54, 54)
+                            .addComponent(type_recherche, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(40, 40, 40)
+                            .addComponent(code_field, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(28, 28, 28)
+                            .addComponent(jButton1)))
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(113, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,8 +141,10 @@ public class VisionnerTransactionsPanel extends javax.swing.JPanel {
                     .addComponent(code_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -157,10 +167,35 @@ public class VisionnerTransactionsPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try{
+            
+            
+            ConnectionBD conn = new ConnectionBD();
+            ResultSet rs;
+            String sql="select * from transactions where code_compte=(select code_compte from comptes where id_client=(select id_client from clients where cin_client=?));";
+            
+            rs = conn.initRequetePreparee(sql, true, code_field.getText()).executeQuery();
+            PrintWriter writer = new PrintWriter("relever_file.txt", "UTF-8");
+            while(rs.next())
+            {
+               String type= rs.getInt("type_transaction")== 1 ? "Déposer" : "retirer" ;
+               writer.println("cin: " + code_field.getText() + " code_compte: " + rs.getString("code_compte") + " type_transaction: " + type + " mantant_transaction: " + rs.getDouble("montant_transaction"));
+            
+            }
+            writer.close();
+            
+        }catch(Exception e)
+        {
+            System.err.println(e);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField code_field;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table_transactions;

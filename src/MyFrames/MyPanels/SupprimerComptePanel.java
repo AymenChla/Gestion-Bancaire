@@ -6,6 +6,8 @@
 package MyFrames.MyPanels;
 
 import GestionBancaire.ConnectionBD;
+import MyFrames.FrameClient;
+import static MyFrames.MyPanels.VisionnerClientPanel.fillTable;
 import static MyFrames.MyPanels.VisionnerClientPanel.model;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -101,7 +103,7 @@ public class SupprimerComptePanel extends javax.swing.JPanel {
                             sql = "delete from comptes_epargnes where code_compte=?;";
                             conn.initRequetePreparee(sql, true ,code).executeUpdate();
                             
-                            JOptionPane.showMessageDialog(null, "Client supprimer");
+                            JOptionPane.showMessageDialog(null, "Compte supprimer");
                         } else {
                             //set client inactif
 
@@ -111,43 +113,18 @@ public class SupprimerComptePanel extends javax.swing.JPanel {
                             JOptionPane.showMessageDialog(null, "set compte inactif");
                         }
 
+                        
+                         
                         //actualiser la table des clients
                         VisionnerClientPanel.model.setRowCount(0);
-                        try {
+                        String requete = "select code_agence from agences where nom_agence=?";
+                         rs = conn.initRequetePreparee(requete, true, FrameClient.visionnerClientPanel.getListe_agence().getSelectedItem().toString()).executeQuery();
+                        if (rs.next()) {
+                             sql = "select * from clients where code_agence=?;";
+                            fillTable(sql, rs.getInt("code_agence"));
 
-                            sql = "select * from clients";
-                            rs = conn.Select(sql);
-
-                            while (rs.next()) {
-                                String cin = rs.getString("cin_client");
-                                String nom = rs.getString("nom_client");
-                                String prenom = rs.getString("prenom_client");
-                                double solde_courant = 0, solde_epargne = 0;
-
-                                sql = "select * from comptes where id_client= ?";
-                                PreparedStatement prpstm = conn.initRequetePreparee(sql, true, rs.getInt("id_client"));
-                                ResultSet rsc = prpstm.executeQuery();
-                                while (rsc.next()) {
-                                    double solde = rsc.getDouble("solde_compte");
-
-                                    sql = "select * from comptes_courants where code_compte=?";
-                                    prpstm = conn.initRequetePreparee(sql, true, rsc.getInt("code_compte"));
-                                    ResultSet rscc = prpstm.executeQuery();
-                                    if (rscc.next()) {
-                                        //compte courant
-                                        solde_courant = solde;
-
-                                    } else { //comptes epargne
-                                        solde_epargne = solde;
-                                    }
-                                }
-                                model.addRow(new Object[]{cin, nom, prenom, solde_courant, solde_epargne});
-                            }
-
-                            conn.disconnect();
-                        } catch (Exception e) {
-                            System.err.println(e);
                         }
+                      
                     }
                 }
             } else {

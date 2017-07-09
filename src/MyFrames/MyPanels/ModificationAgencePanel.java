@@ -201,15 +201,19 @@ public class ModificationAgencePanel extends javax.swing.JPanel {
             ville_field.setEnabled(false);
             adresse_field.setEnabled(false);
             
-            //mettre a jour la liste de agences
+           //mettre a jour la liste de agences
             String requete = "select * from agences";
             try {
 
                 ResultSet rs = conn.Select(requete);
-                
+
                 FrameClient.nouveauClientPanel.getListe_agences().removeAllItems();
+                FrameClient.visionnerClientPanel.getListe_agence().removeAllItems();
+                FrameClient.modificationClientPanel.getListe_agences().removeAllItems();
                 while (rs.next()) {
                     FrameClient.nouveauClientPanel.getListe_agences().addItem(rs.getString("nom_agence"));
+                    FrameClient.visionnerClientPanel.getListe_agence().addItem(rs.getString("nom_agence"));
+                    FrameClient.modificationClientPanel.getListe_agences().addItem(rs.getString("nom_agence"));
                 }
 
                 conn.disconnect();

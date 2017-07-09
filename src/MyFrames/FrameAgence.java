@@ -89,6 +89,10 @@ public class FrameAgence extends javax.swing.JInternalFrame {
         DynamicPanel = new javax.swing.JPanel();
 
         setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        setTitle("Agence");
 
         jButton1.setText("Nouveau");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -132,7 +136,7 @@ public class FrameAgence extends javax.swing.JInternalFrame {
                 .addComponent(jButton3)
                 .addGap(32, 32, 32)
                 .addComponent(jButton2)
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addContainerGap(148, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.LINE_START);
@@ -141,11 +145,11 @@ public class FrameAgence extends javax.swing.JInternalFrame {
         DynamicPanel.setLayout(DynamicPanelLayout);
         DynamicPanelLayout.setHorizontalGroup(
             DynamicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 435, Short.MAX_VALUE)
+            .addGap(0, 467, Short.MAX_VALUE)
         );
         DynamicPanelLayout.setVerticalGroup(
             DynamicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 310, Short.MAX_VALUE)
+            .addGap(0, 329, Short.MAX_VALUE)
         );
 
         getContentPane().add(DynamicPanel, java.awt.BorderLayout.CENTER);

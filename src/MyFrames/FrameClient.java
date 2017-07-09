@@ -5,12 +5,20 @@
  */
 package MyFrames;
 
+import GestionBancaire.ConnectionBD;
+import MyFrames.MyPanels.FicheClientPanel;
 import MyFrames.MyPanels.ModificationClientPanel;
 import MyFrames.MyPanels.NouveauClientPanel;
 import MyFrames.MyPanels.SuppressionClientPanel;
 import MyFrames.MyPanels.VisionnerClientPanel;
+import static MyFrames.MyPanels.VisionnerClientPanel.fillTable;
+import gestionbancaire3.Authentification;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.ResultSet;
 
 /**
  *
@@ -20,9 +28,10 @@ public class FrameClient extends javax.swing.JInternalFrame {
     
     GridBagLayout layout = new GridBagLayout();
     public static NouveauClientPanel nouveauClientPanel;
-    VisionnerClientPanel  visionnerClientPanel;
-    ModificationClientPanel modificationClientPanel;
+    public static VisionnerClientPanel  visionnerClientPanel;
+    public static ModificationClientPanel modificationClientPanel;
     SuppressionClientPanel suppressionClientPanel;
+    public static FicheClientPanel ficheClientPanel;
     
     private static FrameClient myInstance;
 
@@ -42,6 +51,7 @@ public class FrameClient extends javax.swing.JInternalFrame {
         visionnerClientPanel = new VisionnerClientPanel();
         modificationClientPanel = new ModificationClientPanel();
         suppressionClientPanel  = new SuppressionClientPanel();
+        ficheClientPanel = new FicheClientPanel();
         DynamicPanel.setLayout(layout);
         
         GridBagConstraints c = new GridBagConstraints();
@@ -57,6 +67,10 @@ public class FrameClient extends javax.swing.JInternalFrame {
         c.gridx = 0;
         c.gridy = 0;
         DynamicPanel.add(suppressionClientPanel,c);
+        c.gridx = 0;
+        c.gridy = 0;
+        DynamicPanel.add(ficheClientPanel,c);
+        
         
         afficherPanelNouveauClient();
     }
@@ -75,10 +89,16 @@ public class FrameClient extends javax.swing.JInternalFrame {
         btnVisionner = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         DynamicPanel = new javax.swing.JPanel();
 
         setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
         setTitle("Client");
+        setVisible(false);
 
         btnNouveau.setText("Nouveau");
         btnNouveau.addActionListener(new java.awt.event.ActionListener() {
@@ -108,49 +128,66 @@ public class FrameClient extends javax.swing.JInternalFrame {
             }
         });
 
+        jButton2.setText("Fiche client");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Exporter");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout sideBarMenuPanelLayout = new javax.swing.GroupLayout(sideBarMenuPanel);
         sideBarMenuPanel.setLayout(sideBarMenuPanelLayout);
         sideBarMenuPanelLayout.setHorizontalGroup(
             sideBarMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(sideBarMenuPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(sideBarMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnNouveau, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnVisionner, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sideBarMenuPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addContainerGap()
+                .addGroup(sideBarMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnNouveau, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, sideBarMenuPanelLayout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnVisionner, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         sideBarMenuPanelLayout.setVerticalGroup(
             sideBarMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sideBarMenuPanelLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
+                .addContainerGap()
                 .addComponent(btnNouveau)
-                .addGap(35, 35, 35)
-                .addComponent(btnVisionner)
-                .addGap(34, 34, 34)
-                .addComponent(jButton3)
                 .addGap(31, 31, 31)
+                .addComponent(btnVisionner)
+                .addGap(32, 32, 32)
+                .addComponent(jButton3)
+                .addGap(36, 36, 36)
                 .addComponent(jButton1)
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addGap(35, 35, 35)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(jButton4)
+                .addContainerGap())
         );
 
         getContentPane().add(sideBarMenuPanel, java.awt.BorderLayout.LINE_START);
-
-        DynamicPanel.setBackground(new java.awt.Color(204, 204, 255));
 
         javax.swing.GroupLayout DynamicPanelLayout = new javax.swing.GroupLayout(DynamicPanel);
         DynamicPanel.setLayout(DynamicPanelLayout);
         DynamicPanelLayout.setHorizontalGroup(
             DynamicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 515, Short.MAX_VALUE)
+            .addGap(0, 560, Short.MAX_VALUE)
         );
         DynamicPanelLayout.setVerticalGroup(
             DynamicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 297, Short.MAX_VALUE)
+            .addGap(0, 329, Short.MAX_VALUE)
         );
 
         getContentPane().add(DynamicPanel, java.awt.BorderLayout.CENTER);
@@ -174,12 +211,49 @@ public class FrameClient extends javax.swing.JInternalFrame {
         afficherPanelSuppressionClient();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        afficherFicheClientPanel();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        
+        try{
+            
+            String sql;
+            ConnectionBD conn = new ConnectionBD();
+            ResultSet rs;
+            if(Authentification.id_agence==1){
+                sql = "select * from clients;";
+                rs = conn.Select(sql);
+            }
+            else{
+                sql = "select * from clients where code_agence=?;";
+                rs = conn.initRequetePreparee(sql, true, Authentification.id_agence).executeQuery();
+            }
+            
+            PrintWriter writer = new PrintWriter("clients_file.txt", "UTF-8");
+            while(rs.next())
+            {
+           
+               writer.println("nom : " + rs.getString("nom_client") + " prenom: " + rs.getString("prenom_client") + " code_agence: " +rs.getString("code_agence") + " cin_client: " + rs.getString("cin_client"));
+            
+            }
+            writer.close();
+            
+        }catch(Exception e)
+        {
+            System.err.println(e);
+        }
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     public void afficherPanelNouveauClient()
     {
         nouveauClientPanel.setVisible(true);
         visionnerClientPanel.setVisible(false);
         modificationClientPanel.setVisible(false);
         suppressionClientPanel.setVisible(false);
+        ficheClientPanel.setVisible(false);
     }
     
     public void afficherPanelVisionnerClient()
@@ -188,6 +262,7 @@ public class FrameClient extends javax.swing.JInternalFrame {
         visionnerClientPanel.setVisible(true);
         modificationClientPanel.setVisible(false);
         suppressionClientPanel.setVisible(false);
+        ficheClientPanel.setVisible(false);
     }
     
     public void afficherPanelModificationClient()
@@ -196,6 +271,7 @@ public class FrameClient extends javax.swing.JInternalFrame {
         visionnerClientPanel.setVisible(false);
         modificationClientPanel.setVisible(true);
         suppressionClientPanel.setVisible(false);
+        ficheClientPanel.setVisible(false);
     }
     
     public void afficherPanelSuppressionClient()
@@ -204,14 +280,25 @@ public class FrameClient extends javax.swing.JInternalFrame {
         visionnerClientPanel.setVisible(false);
         modificationClientPanel.setVisible(false);
         suppressionClientPanel.setVisible(true);
+        ficheClientPanel.setVisible(false);
     }
     
+    public void afficherFicheClientPanel()
+    {
+        nouveauClientPanel.setVisible(false);
+        visionnerClientPanel.setVisible(false);
+        modificationClientPanel.setVisible(false);
+        suppressionClientPanel.setVisible(false);
+        ficheClientPanel.setVisible(true);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel DynamicPanel;
     private javax.swing.JButton btnNouveau;
     private javax.swing.JButton btnVisionner;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JPanel sideBarMenuPanel;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,12 +6,22 @@
 package MyFrames.MyPanels;
         
 import GestionBancaire.ConnectionBD;
+import static MyFrames.MyPanels.VisionnerClientPanel.fillTable;
 import static MyFrames.MyPanels.VisionnerClientPanel.model;
 import gestionbancaire3.Authentification;
+import static gestionbancaire3.Authentification.id_agence;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.imageio.ImageIO;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import jdk.internal.org.xml.sax.ErrorHandler;
 
         
 /**
@@ -19,20 +29,35 @@ import javax.swing.JOptionPane;
  * @author asus pro
  */
 public class NouveauClientPanel extends javax.swing.JPanel {
-    
+            JFileChooser fc = new JFileChooser();
+
     
     /**
      * Creates new form NouveauClientPanel
      */
     public NouveauClientPanel() {
         initComponents();
+        String requete;
+        ResultSet rs;
         
-       
-        String requete = "select * from agences";
-        try {
+    try {
+        ConnectionBD conn = new ConnectionBD();
+        if(Authentification.id_agence != 1)
+        {
+            requete = "select * from agences where code_agence=?";
+            rs = conn.initRequetePreparee(requete,true,Authentification.id_agence).executeQuery();
+            
+           
+        }
+        else{
+            
+            requete = "select * from agences;";
+            rs = conn.Select(requete);
+        }
 
-            ConnectionBD conn = new ConnectionBD();
-            ResultSet rs = conn.Select(requete);
+
+            
+             
 
             while(rs.next())
             {
@@ -68,8 +93,9 @@ public class NouveauClientPanel extends javax.swing.JPanel {
         prenom_field = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         liste_agences = new javax.swing.JComboBox<>();
+        jButton2 = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(204, 204, 204));
+        setPreferredSize(new java.awt.Dimension(586, 343));
 
         jLabel1.setText("CIN");
 
@@ -84,6 +110,12 @@ public class NouveauClientPanel extends javax.swing.JPanel {
 
         jLabel3.setText("Prenom");
 
+        prenom_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prenom_fieldActionPerformed(evt);
+            }
+        });
+
         jLabel4.setText("Agence:");
 
         liste_agences.setEnabled(false);
@@ -93,31 +125,44 @@ public class NouveauClientPanel extends javax.swing.JPanel {
             }
         });
 
+        jButton2.setText("Image");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(70, 70, 70)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1)
-                                .addComponent(jLabel2))
-                            .addGap(80, 80, 80)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(cin_field, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
-                                .addComponent(nom_field)))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel4)
-                            .addGap(61, 61, 61)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
-                                .addComponent(prenom_field, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(liste_agences, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addContainerGap(145, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                                .addComponent(liste_agences, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2))
+                                .addGap(80, 80, 80)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cin_field, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
+                                    .addComponent(nom_field)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(prenom_field, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(331, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,17 +175,19 @@ public class NouveauClientPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(nom_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(prenom_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(23, 23, 23)
+                .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(liste_agences, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(31, Short.MAX_VALUE))
+                    .addComponent(liste_agences, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -150,59 +197,38 @@ public class NouveauClientPanel extends javax.swing.JPanel {
         String nom = nom_field.getText();
         String prenom = prenom_field.getText();
         String nom_agence = liste_agences.getSelectedItem().toString();
-        String get_id_agence_sql = "Select code_agence from agences where nom_agence= ?";
-        String requete = "insert into clients(cin_client,nom_client,prenom_client,code_agence) values(?,?,?,?)";
+         
+        String requete = "insert into clients(cin_client,nom_client,prenom_client,code_agence,image) values(?,?,?,?,?)";
         try {
+            FileInputStream fis = new FileInputStream(fc.getSelectedFile());
             ConnectionBD conn = new ConnectionBD();
-            PreparedStatement preparedStm = conn.initRequetePreparee(get_id_agence_sql, true,nom_agence);
-            ResultSet rs = preparedStm.executeQuery();
-            if(rs.next())
-            {
-                preparedStm = conn.initRequetePreparee(requete, true, cin,nom,prenom,rs.getInt("code_agence"));
-                preparedStm.executeUpdate();
+           PreparedStatement preparedStm = null;
+           if(Authentification.id_agence != 1)
+                 preparedStm = conn.initRequetePreparee(requete, true, cin,nom,prenom,Authentification.id_agence,fis);
+           else {
+               String sql = "select code_agence from agences where nom_agence = ?";
+               ResultSet rs = conn.initRequetePreparee(sql, true, nom_agence).executeQuery();
+               if(rs.next())
+               {
+                   preparedStm =conn.initRequetePreparee(requete, true,  cin,nom,prenom,rs.getInt("code_agence"),fis);
+               }
+           }
+            preparedStm.executeUpdate();
             
-                JOptionPane.showMessageDialog(null, "client ajouté");
+            JOptionPane.showMessageDialog(null, "client ajouté");
 
             //actualiser la table des clients
-            
             VisionnerClientPanel.model.setRowCount(0);
-                 try {
-                    
-                     String sql = "select * from clients";
-                     rs = conn.Select(sql);
-
-                    while (rs.next()) {
-                         cin = rs.getString("cin_client");
-                         nom = rs.getString("nom_client");
-                         prenom = rs.getString("prenom_client");
-                        double solde_courant = 0, solde_epargne = 0;
-
-                        sql = "select * from comptes where id_client= ?";
-                        PreparedStatement prpstm = conn.initRequetePreparee(sql, true, rs.getInt("id_client"));
-                        ResultSet rsc = prpstm.executeQuery();
-                        while (rsc.next()) {
-                            double solde = rsc.getDouble("solde_compte");
-
-                            sql = "select * from comptes_courants where code_compte=?";
-                            prpstm = conn.initRequetePreparee(sql, true, rsc.getInt("code_compte"));
-                            ResultSet rscc = prpstm.executeQuery();
-                            if (rscc.next()) {
-                                //compte courant
-                                solde_courant = solde;
-
-                            } else { //comptes epargne
-                                solde_epargne = solde;
-                            }
-                        }
-                        model.addRow(new Object[]{cin, nom, prenom, solde_courant, solde_epargne});
-                    }
-
-                        conn.disconnect();
-                    } catch (Exception e) {
-                        System.err.println(e);
-                    }
-
-            }
+              String sql = "select * from clients where code_agence=?;";
+                fillTable(sql,Authentification.id_agence);
+                
+         
+               
+                
+              
+               
+                
+               
             
 
         } catch (Exception e) {
@@ -214,10 +240,52 @@ public class NouveauClientPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_liste_agencesActionPerformed
 
+    private void prenom_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prenom_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_prenom_fieldActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        choosePicture();
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+    private boolean imageValide=false;
+    private void choosePicture() {
+
+        FileFilter imageFilter = new FileNameExtensionFilter(
+                "Image files", ImageIO.getReaderFileSuffixes());
+        fc.setFileFilter(imageFilter);
+        int returnVal = fc.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File picture = fc.getSelectedFile();
+            String absolutePath = picture.getAbsolutePath();
+            String extension = picture.getName().substring(picture.getName().lastIndexOf('.') + 1);
+            if (!extension.equalsIgnoreCase("jpg") && !extension.equalsIgnoreCase("png")) {
+                imageValide = false;
+               
+                
+            } else {
+                try {
+                    BufferedImage bimg = ImageIO.read(fc.getSelectedFile());
+                    int width = bimg.getWidth();
+                    int height = bimg.getHeight();
+                    if (!(width >= 70 && width <= 120) || !(height >= 70 && height <= 120)) {
+                        throw new Exception();
+                    }
+                    imageValide = true;
+                    
+                } catch (Exception e) {
+                    imageValide = false;
+                   
+                   
+                }
+            }
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField cin_field;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

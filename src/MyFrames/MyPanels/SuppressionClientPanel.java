@@ -6,6 +6,7 @@
 package MyFrames.MyPanels;
 
 import GestionBancaire.ConnectionBD;
+import static MyFrames.MyPanels.VisionnerClientPanel.fillTable;
 import static MyFrames.MyPanels.VisionnerClientPanel.model;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -111,44 +112,11 @@ public class SuppressionClientPanel extends javax.swing.JPanel {
                             }
                         
                         
-                        
                             //actualiser la table des clients
                             VisionnerClientPanel.model.setRowCount(0);
-                            try {
-
-                                sql = "select * from clients";
-                                rs = conn.Select(sql);
-
-                                while (rs.next()) {
-                                    cin = rs.getString("cin_client");
-                                    String nom = rs.getString("nom_client");
-                                    String prenom = rs.getString("prenom_client");
-                                    double solde_courant = 0, solde_epargne = 0;
-
-                                    sql = "select * from comptes where id_client= ?";
-                                    PreparedStatement prpstm = conn.initRequetePreparee(sql, true, rs.getInt("id_client"));
-                                    ResultSet rsc = prpstm.executeQuery();
-                                    while (rsc.next()) {
-                                        double solde = rsc.getDouble("solde_compte");
-
-                                        sql = "select * from comptes_courants where code_compte=?";
-                                        prpstm = conn.initRequetePreparee(sql, true, rsc.getInt("code_compte"));
-                                        ResultSet rscc = prpstm.executeQuery();
-                                        if (rscc.next()) {
-                                            //compte courant
-                                            solde_courant = solde;
-
-                                        } else { //comptes epargne
-                                            solde_epargne = solde;
-                                        }
-                                    }
-                                    model.addRow(new Object[]{cin, nom, prenom, solde_courant, solde_epargne});
-                                }
-
-                                conn.disconnect();
-                            } catch (Exception e) {
-                                System.err.println(e);
-                            }
+                            
+                            
+                                
                         }
                 }
             }

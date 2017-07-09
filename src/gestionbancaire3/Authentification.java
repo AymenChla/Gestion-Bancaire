@@ -23,6 +23,7 @@ public class Authentification extends javax.swing.JFrame {
      */
     public Authentification() {
         initComponents();
+        setLocationRelativeTo(null); 
     }
 
     /**
@@ -38,15 +39,21 @@ public class Authentification extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         login_field = new javax.swing.JTextField();
-        password_field = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        checkAdmin = new javax.swing.JCheckBox();
+        password_field = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanel1.setBackground(java.awt.Color.gray);
+        jPanel1.setForeground(new java.awt.Color(255, 255, 255));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Login:");
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Password:");
 
         jButton1.setText("S'identifié");
@@ -56,8 +63,6 @@ public class Authentification extends javax.swing.JFrame {
             }
         });
 
-        checkAdmin.setText("Administration");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -65,17 +70,14 @@ public class Authentification extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(147, 147, 147)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(checkAdmin)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(112, 112, 112)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
-                            .addComponent(login_field)
-                            .addComponent(password_field))))
-                .addContainerGap(184, Short.MAX_VALUE))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(112, 112, 112)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                    .addComponent(login_field)
+                    .addComponent(password_field))
+                .addContainerGap(162, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -84,15 +86,13 @@ public class Authentification extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(login_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(password_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(checkAdmin)
-                .addGap(6, 6, 6)
+                .addGap(47, 47, 47)
                 .addComponent(jButton1)
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 580, 330));
@@ -102,11 +102,8 @@ public class Authentification extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String sql;
-        if(checkAdmin.isSelected())
-        {
-            sql = "select * from employes where login=? and password = ? and id_agence = 1";
-        }
-        else sql = "select * from employes where login=? and password = ? and id_agence <> 1";
+        
+        sql = "select * from employes where login=? and password = ?";
         
         try {
             ConnectionBD conn = new ConnectionBD();
@@ -117,6 +114,7 @@ public class Authentification extends javax.swing.JFrame {
             if (rs.next()) {
                 
                 id_agence = rs.getInt("id_agence");
+                
                 setVisible(false);
                 java.awt.EventQueue.invokeLater(() -> {
                     new MainFrame().setVisible(true);
@@ -169,12 +167,11 @@ public class Authentification extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox checkAdmin;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField login_field;
-    private javax.swing.JTextField password_field;
+    private javax.swing.JPasswordField password_field;
     // End of variables declaration//GEN-END:variables
 }

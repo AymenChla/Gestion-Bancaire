@@ -118,8 +118,12 @@ public class SupprimerAgencePanel extends javax.swing.JPanel {
                              rs = conn.Select(requete);
 
                             FrameClient.nouveauClientPanel.getListe_agences().removeAllItems();
+                            FrameClient.visionnerClientPanel.getListe_agence().removeAllItems();
+                            FrameClient.modificationClientPanel.getListe_agences().removeAllItems();
                             while (rs.next()) {
                                 FrameClient.nouveauClientPanel.getListe_agences().addItem(rs.getString("nom_agence"));
+                                FrameClient.visionnerClientPanel.getListe_agence().addItem(rs.getString("nom_agence"));
+                                FrameClient.modificationClientPanel.getListe_agences().addItem(rs.getString("nom_agence"));
                             }
 
                             conn.disconnect();

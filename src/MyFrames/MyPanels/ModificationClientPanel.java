@@ -6,11 +6,13 @@
 package MyFrames.MyPanels;
 
 import GestionBancaire.ConnectionBD;
+import static MyFrames.MyPanels.VisionnerClientPanel.fillTable;
 import static MyFrames.MyPanels.VisionnerClientPanel.model;
 import gestionbancaire3.Authentification;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,11 +27,22 @@ public class ModificationClientPanel extends javax.swing.JPanel {
      */
     public ModificationClientPanel() {
         initComponents();
-         String requete = "select * from agences";
+        String requete;
+         
         try {
 
             ConnectionBD conn = new ConnectionBD();
-            ResultSet rs = conn.Select(requete);
+            ResultSet rs;
+            if(Authentification.id_agence != 1)
+            {
+                requete = "select * from agences where code_agence=?";
+                rs = conn.initRequetePreparee(requete, true,Authentification.id_agence).executeQuery();
+            }
+            else {
+                requete = "select * from agences";
+                rs = conn.Select(requete);
+            }
+             
 
             while(rs.next())
             {
@@ -95,37 +108,37 @@ public class ModificationClientPanel extends javax.swing.JPanel {
         jLabel5.setText("Agence: ");
 
         liste_agences.setEnabled(false);
+        liste_agences.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                liste_agencesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnModifier, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
-                        .addComponent(jLabel1)
-                        .addGap(34, 34, 34)
-                        .addComponent(cin_field, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(47, 47, 47)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel5))
-                        .addGap(69, 69, 69)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(nom_modification)
-                            .addComponent(prenom_modification, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
-                            .addComponent(cin_modification)
-                            .addComponent(liste_agences, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(btnModifier)))
-                .addContainerGap(91, Short.MAX_VALUE))
+                            .addComponent(cin_modification, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cin_field, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nom_modification, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(prenom_modification, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(liste_agences, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(54, 54, 54)
+                        .addComponent(jButton1)))
+                .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,23 +148,23 @@ public class ModificationClientPanel extends javax.swing.JPanel {
                     .addComponent(jLabel1)
                     .addComponent(cin_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addGap(59, 59, 59)
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(cin_modification, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(nom_modification, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(prenom_modification, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(liste_agences, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
                 .addComponent(btnModifier)
                 .addContainerGap())
         );
@@ -209,51 +222,28 @@ public class ModificationClientPanel extends javax.swing.JPanel {
 
                 //actualiser la table des clients
                 VisionnerClientPanel.model.setRowCount(0);
-                 try {
-                    
-                     String sql = "select * from clients";
-                     rs = conn.Select(sql);
+                requete = "select code_agence from agences where nom_agence=?";
+                 rs = conn.initRequetePreparee(requete, true, nom_agence).executeQuery();
+                if (rs.next()) {
+                    String sql = "select * from clients where code_agence=?;";
+                    fillTable(sql, rs.getInt("code_agence"));
 
-                    while (rs.next()) {
-                         cin = rs.getString("cin_client");
-                         nom = rs.getString("nom_client");
-                         prenom = rs.getString("prenom_client");
-                        double solde_courant = 0, solde_epargne = 0;
-
-                        sql = "select * from comptes where id_client= ?";
-                        PreparedStatement prpstm = conn.initRequetePreparee(sql, true, rs.getInt("id_client"));
-                        ResultSet rsc = prpstm.executeQuery();
-                        while (rsc.next()) {
-                            double solde = rsc.getDouble("solde_compte");
-
-                            sql = "select * from comptes_courants where code_compte=?";
-                            prpstm = conn.initRequetePreparee(sql, true, rsc.getInt("code_compte"));
-                            ResultSet rscc = prpstm.executeQuery();
-                            if (rscc.next()) {
-                                //compte courant
-                                solde_courant = solde;
-
-                            } else { //comptes epargne
-                                solde_epargne = solde;
-                            }
-                        }
-                        model.addRow(new Object[]{cin, nom, prenom, solde_courant, solde_epargne});
-                    }
-
-                        conn.disconnect();
-                    } catch (Exception e) {
-                        System.err.println(e);
-                    }
-                
+                }
+                       
+                 
             }
             
-
+            conn.disconnect();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
         
         btnModifier.setEnabled(false);
     }//GEN-LAST:event_btnModifierActionPerformed
+
+    private void liste_agencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_liste_agencesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_liste_agencesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -270,4 +260,8 @@ public class ModificationClientPanel extends javax.swing.JPanel {
     private javax.swing.JTextField nom_modification;
     private javax.swing.JTextField prenom_modification;
     // End of variables declaration//GEN-END:variables
+
+    public JComboBox<String> getListe_agences() {
+        return liste_agences;
+    }
 }

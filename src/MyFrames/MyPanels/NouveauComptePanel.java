@@ -6,6 +6,8 @@
 package MyFrames.MyPanels;
 
 import GestionBancaire.ConnectionBD;
+import MyFrames.FrameClient;
+import static MyFrames.MyPanels.VisionnerClientPanel.fillTable;
 import static MyFrames.MyPanels.VisionnerClientPanel.model;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -155,16 +157,20 @@ public class NouveauComptePanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(typeCompte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(solde_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(decouvert_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jLabel4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(solde_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(decouvert_field, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnCreer)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -319,47 +325,24 @@ public class NouveauComptePanel extends javax.swing.JPanel {
                     btnCreer.setEnabled(false);
                     
                     //actualiser la table des clients
+                    
                     VisionnerClientPanel.model.setRowCount(0);
-                    try {
+                    requete = "select code_agence from agences where nom_agence=?";
+                     rs = conn.initRequetePreparee(requete, true, FrameClient.visionnerClientPanel.getListe_agence().getSelectedItem().toString()).executeQuery();
+                    if (rs.next()) {
+                         sql = "select * from clients where code_agence=?;";
+                        fillTable(sql, rs.getInt("code_agence"));
 
-                        sql = "select * from clients";
-                        rs = conn.Select(sql);
+                }
+                   
 
-                        while (rs.next()) {
-                            String cin = rs.getString("cin_client");
-                            String nom = rs.getString("nom_client");
-                            String prenom = rs.getString("prenom_client");
-                            double solde_courant = 0, solde_epargne = 0;
-
-                            sql = "select * from comptes where id_client= ?";
-                            PreparedStatement prpstm = conn.initRequetePreparee(sql, true, rs.getInt("id_client"));
-                            ResultSet rsc = prpstm.executeQuery();
-                            while (rsc.next()) {
-                                 solde = rsc.getDouble("solde_compte");
-
-                                sql = "select * from comptes_courants where code_compte=?";
-                                prpstm = conn.initRequetePreparee(sql, true, rsc.getInt("code_compte"));
-                                ResultSet rscc = prpstm.executeQuery();
-                                if (rscc.next()) {
-                                    //compte courant
-                                    solde_courant = solde;
-
-                                } else { //comptes epargne
-                                    solde_epargne = solde;
-                                }
-                            }
-                            model.addRow(new Object[]{cin, nom, prenom, solde_courant, solde_epargne});
-                        }
-
-                        conn.disconnect();
-                    } catch (Exception e) {
-                        System.err.println(e);
-                    }
+                        
+                
                 }
                 
                 
 
-              
+              conn.disconnect();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }

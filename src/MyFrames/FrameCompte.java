@@ -5,12 +5,16 @@
  */
 package MyFrames;
 
+import GestionBancaire.ConnectionBD;
 import MyFrames.MyPanels.NouveauComptePanel;
 import MyFrames.MyPanels.SupprimerComptePanel;
 import MyFrames.MyPanels.TransactionComptePanel;
 import MyFrames.MyPanels.VisionnerTransactionsPanel;
+import gestionbancaire3.Authentification;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.PrintWriter;
+import java.sql.ResultSet;
 
 /**
  *
@@ -89,7 +93,14 @@ public class FrameCompte extends javax.swing.JInternalFrame {
         );
 
         setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
         setTitle("Compte");
+        setMinimumSize(new java.awt.Dimension(80, 34));
+        setNormalBounds(new java.awt.Rectangle(0, 0, 80, 0));
+        setPreferredSize(new java.awt.Dimension(713, 377));
+        setVisible(false);
 
         jButton1.setText("Nouveau");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -148,13 +159,14 @@ public class FrameCompte extends javax.swing.JInternalFrame {
 
         getContentPane().add(sideBarMenuPanel, java.awt.BorderLayout.LINE_START);
 
-        DynamicPanel.setBackground(new java.awt.Color(204, 204, 255));
+        DynamicPanel.setMaximumSize(new java.awt.Dimension(85, 23));
+        DynamicPanel.setMinimumSize(new java.awt.Dimension(85, 23));
 
         javax.swing.GroupLayout DynamicPanelLayout = new javax.swing.GroupLayout(DynamicPanel);
         DynamicPanel.setLayout(DynamicPanelLayout);
         DynamicPanelLayout.setHorizontalGroup(
             DynamicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 589, Short.MAX_VALUE)
+            .addGap(0, 549, Short.MAX_VALUE)
         );
         DynamicPanelLayout.setVerticalGroup(
             DynamicPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

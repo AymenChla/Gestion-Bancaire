@@ -6,8 +6,11 @@
 package MyFrames.MyPanels;
 
 import GestionBancaire.ConnectionBD;
+import MyFrames.FrameClient;
+import gestionbancaire3.Authentification;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,23 +26,53 @@ public class VisionnerClientPanel extends javax.swing.JPanel {
     public VisionnerClientPanel() {
         
         initComponents();
-        
-        fillTable();
-        
-    }
-
-    public  void fillTable()
-    {
         model.addColumn("cin");
         model.addColumn("nom");
         model.addColumn("prenom");
         model.addColumn("compte courant");
         model.addColumn("compte epargne");
+        
+        String sql="";
+        ResultSet  rs;
+        try{
+            ConnectionBD conn = new ConnectionBD();
+            if(Authentification.id_agence == 1)
+            {
+                liste_agence.setEnabled(true);
+                btnChercher.setEnabled(true);
+                sql = "select * from agences;";
+                rs = conn.Select(sql);
+                
+            }
+            else{
+                sql = "select * from agences where code_agence=?;";
+                rs = conn.initRequetePreparee(sql,false,Authentification.id_agence).executeQuery();
+                fillTable("select * from clients where code_agence=?",Authentification.id_agence);
+                
+                
+            }
+            
+            while(rs.next())
+            {
+                liste_agence.addItem(rs.getString("nom_agence"));
+            }
+            
+            conn.disconnect();
+        }catch(Exception e)
+        {
+            System.err.println(e);
+        }
+        
+    }
 
+    public static  void fillTable(String sql,int agence)
+    {
+        
+           model.setRowCount(0);
         try {
             ConnectionBD conn = new ConnectionBD();
-            String sql = "select * from clients";
-            ResultSet rs = conn.Select(sql);
+            
+            ResultSet rs = conn.initRequetePreparee(sql,false,agence).executeQuery();
 
             while (rs.next()) {
                 String cin = rs.getString("cin_client");
@@ -66,13 +99,13 @@ public class VisionnerClientPanel extends javax.swing.JPanel {
                 }
                 model.addRow(new Object[]{cin, nom, prenom, solde_courant, solde_epargne});
             }
-
+            tableClients.setModel(model);
             conn.disconnect();
         } catch (Exception e) {
             System.err.println(e);
         }
 
-        tableClients.setModel(model);
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -85,19 +118,36 @@ public class VisionnerClientPanel extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tableClients = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        liste_agence = new javax.swing.JComboBox<>();
+        btnChercher = new javax.swing.JButton();
 
         tableClients.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6"
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5"
             }
         ));
+        tableClients.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableClientsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableClients);
+
+        jLabel1.setText("Agence: ");
+
+        liste_agence.setEnabled(false);
+
+        btnChercher.setText("Rechercher");
+        btnChercher.setEnabled(false);
+        btnChercher.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChercherActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -105,21 +155,78 @@ public class VisionnerClientPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 548, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(57, 57, 57)
+                        .addComponent(liste_agence, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addComponent(btnChercher)))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(liste_agence, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnChercher))
+                .addGap(24, 24, 24)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(14, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnChercherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChercherActionPerformed
+        String agence =liste_agence.getSelectedItem().toString();
+        
+        try{
+                ConnectionBD conn = new ConnectionBD();
+                
+               String requete = "select code_agence from agences where nom_agence=?";
+               ResultSet rs = conn.initRequetePreparee(requete, true, agence).executeQuery();
+               if(rs.next())
+               {
+                   String sql = "select * from clients where code_agence=?;";
+                   fillTable(sql,rs.getInt("code_agence"));
+                   tableClients.setModel(model);
+               }
+               
+                
+                
+            
+            
+            conn.disconnect();
+        }catch(Exception e)
+        {
+            System.err.println(e);
+        }
+        
+    }//GEN-LAST:event_btnChercherActionPerformed
+
+    private void tableClientsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableClientsMouseClicked
+       /*try{
+           int i = tableClients.getSelectedRow();
+           FrameClient.ficheClientPanel.deplace(i);
+       }catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "erreur de deplacement: "+e.getLocalizedMessage());
+        }*/
+    }//GEN-LAST:event_tableClientsMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnChercher;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tableClients;
+    private javax.swing.JComboBox<String> liste_agence;
+    public static javax.swing.JTable tableClients;
     // End of variables declaration//GEN-END:variables
+
+    public JComboBox<String> getListe_agence() {
+        return liste_agence;
+    }
+   
 }

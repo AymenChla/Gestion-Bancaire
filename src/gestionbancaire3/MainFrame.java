@@ -28,6 +28,7 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
+        setLocationRelativeTo(null); 
         if(Authentification.id_agence == 1)
             agence_menu.setEnabled(true);
     }
@@ -50,6 +51,7 @@ public class MainFrame extends javax.swing.JFrame {
         MenuVisionnerClient = new javax.swing.JMenuItem();
         menuModification = new javax.swing.JMenuItem();
         menuSuppressionClient = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         menuFichier1 = new javax.swing.JMenu();
         menuNouveauCompte = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -66,11 +68,11 @@ public class MainFrame extends javax.swing.JFrame {
         desktop.setLayout(desktopLayout);
         desktopLayout.setHorizontalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 641, Short.MAX_VALUE)
+            .addGap(0, 704, Short.MAX_VALUE)
         );
         desktopLayout.setVerticalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 332, Short.MAX_VALUE)
+            .addGap(0, 378, Short.MAX_VALUE)
         );
 
         menuFichier.setText("File");
@@ -123,6 +125,14 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         menuClient.add(menuSuppressionClient);
+
+        jMenuItem6.setText("Fiche Client");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        menuClient.add(jMenuItem6);
 
         jMenuBar1.add(menuClient);
 
@@ -232,8 +242,13 @@ public class MainFrame extends javax.swing.JFrame {
             desktop.add(frameClient);
             frameClient.setVisible(true);
         }
-       
-       
+        try {
+
+         frameClient.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       frameClient.toFront();
        frameClient.afficherPanelNouveauClient();
     }//GEN-LAST:event_menuNouveauClientActionPerformed
 
@@ -244,6 +259,13 @@ public class MainFrame extends javax.swing.JFrame {
             desktop.add(frameClient);
             frameClient.setVisible(true);
         }
+        try {
+
+         frameClient.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        frameClient.toFront();
         frameClient.afficherPanelVisionnerClient();
     }//GEN-LAST:event_MenuVisionnerClientActionPerformed
 
@@ -254,6 +276,13 @@ public class MainFrame extends javax.swing.JFrame {
             desktop.add(frameClient);
             frameClient.setVisible(true);
         }
+        try {
+
+         frameClient.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        frameClient.toFront();
         frameClient.afficherPanelModificationClient();
     }//GEN-LAST:event_menuModificationActionPerformed
 
@@ -263,6 +292,13 @@ public class MainFrame extends javax.swing.JFrame {
             desktop.add(frameClient);
             frameClient.setVisible(true);
         }
+       try {
+
+         frameClient.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        frameClient.toFront();
         frameClient.afficherPanelSuppressionClient();
     }//GEN-LAST:event_menuSuppressionClientActionPerformed
 
@@ -272,6 +308,13 @@ public class MainFrame extends javax.swing.JFrame {
             desktop.add(frameCompte);
             frameCompte.setVisible(true);
         }
+        try {
+
+            frameCompte.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        frameCompte.toFront();
         frameCompte.afficherPanelNouveauCompte();
     }//GEN-LAST:event_menuNouveauCompteActionPerformed
 
@@ -285,6 +328,13 @@ public class MainFrame extends javax.swing.JFrame {
             desktop.add(frameCompte);
             frameCompte.setVisible(true);
         }
+       try {
+
+            frameCompte.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        frameCompte.toFront();
         frameCompte.afficherPanelSuppressionCompte();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -294,6 +344,13 @@ public class MainFrame extends javax.swing.JFrame {
             desktop.add(frameCompte);
             frameCompte.setVisible(true);
         }
+        try {
+
+            frameCompte.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        frameCompte.toFront();
         frameCompte.afficherPanelTansactionsTable();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
@@ -303,6 +360,13 @@ public class MainFrame extends javax.swing.JFrame {
             desktop.add(frameCompte);
             frameCompte.setVisible(true);
         }
+        try {
+
+            frameCompte.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        frameCompte.toFront();
         frameCompte.afficherPanelTransactions();
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
@@ -312,6 +376,13 @@ public class MainFrame extends javax.swing.JFrame {
             desktop.add(frameAgence);
             frameAgence.setVisible(true);
         }
+       try {
+
+            frameAgence.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        frameAgence.toFront();
         frameAgence.afficherNouveauAgencePanel();
     }//GEN-LAST:event_menuNouveauCompte1ActionPerformed
 
@@ -321,6 +392,13 @@ public class MainFrame extends javax.swing.JFrame {
             desktop.add(frameAgence);
             frameAgence.setVisible(true);
         }
+       try {
+
+            frameAgence.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        frameAgence.toFront();
         frameAgence.afficherSupprimerAgencePanel();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
@@ -333,9 +411,32 @@ public class MainFrame extends javax.swing.JFrame {
         } else {
             desktop.add(frameAgence);
             frameAgence.setVisible(true);
-        }   
+        }
+            try {
+
+             frameAgence.setMaximum(true);
+         } catch (PropertyVetoException ex) {
+             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+         }
+        frameAgence.toFront();
         frameAgence.afficherModifierAgencePanel();
     }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        if (frameClient.isVisible()) {
+        } else {
+            desktop.add(frameClient);
+            frameClient.setVisible(true);
+        } 
+        try {
+
+            frameClient.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        frameClient.toFront();
+        frameClient.afficherFicheClientPanel();
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -382,6 +483,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenu menuClient;
     private javax.swing.JMenu menuFichier;
     private javax.swing.JMenu menuFichier1;
